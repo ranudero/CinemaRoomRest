@@ -1,0 +1,23 @@
+### Project Specific ###
+
+### Lab specific ###
+
+Cinema Room REST Service with Java/A change of plans
+Cinema Room REST Service with Java/Take your seat
+Cinema Room REST Service with Java/The show begins
+Cinema Room REST Service with Java/The statistics
+
+/Topics
+course-info.yaml
+course-remote-info.yaml
+
+
+### IDEA ###
+.idea/
+*.iml
+
+
+### Gradle ###
+.gradle/
+*build
+*out
