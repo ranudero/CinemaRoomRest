@@ -21,7 +21,9 @@ public class CinemaController {
         } else if (cinemaRoom.isSeatPurchased(seatRequest.getRow(), seatRequest.getColumn())) {
             throw new IllegalStateException("The ticket has been already purchased!");
         } else {
-            return ResponseEntity.ok(cinemaRoom.purchaseSeat(seatRequest.getRow(), seatRequest.getColumn()));
+            Seat purchasedSeat = cinemaRoom.purchaseSeat(seatRequest.getRow(), seatRequest.getColumn());
+            TicketResponse response = new TicketResponse(purchasedSeat);
+            return ResponseEntity.ok(response);
         }
     }
 
