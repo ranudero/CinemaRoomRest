@@ -1,12 +1,15 @@
 package cinema;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class CinemaRoom {
     private int rows;
     private int columns;
     private List<Seat> seats;
+    private final Map<String, Seat> purchasedTickets = new HashMap<>();
 
     public CinemaRoom(int totalRows, int totalColumns) {
         this.rows = totalRows;
@@ -54,6 +57,10 @@ public class CinemaRoom {
         return null;
     }
 
+    public void setToken(Seat seat, String token) {
+        purchasedTickets.put(token, seat);
+    }
+
     public boolean isValidSeat(int row, int column) {
         return row >= 1 && row <= rows && column >= 1 && column <= columns;
     }
@@ -65,5 +72,17 @@ public class CinemaRoom {
             }
         }
         return false;
+    }
+
+    public Seat getSeatByToken(String token) {
+        return purchasedTickets.get(token);
+    }
+
+    public Seat returnSeat(String token){
+        Seat seat = purchasedTickets.remove(token);
+        if (seat != null) {
+            seat.setPurchased(false);
+        }
+        return seat;
     }
 }

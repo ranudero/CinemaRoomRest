@@ -3,6 +3,7 @@ package cinema;
 import java.util.UUID;
 
 public class TicketResponse {
+
     private String token;
     private Seat ticket;
 

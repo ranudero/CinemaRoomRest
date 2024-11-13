@@ -4,6 +4,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 @RequestMapping()
 public class CinemaController {
@@ -23,9 +26,22 @@ public class CinemaController {
         } else {
             Seat purchasedSeat = cinemaRoom.purchaseSeat(seatRequest.getRow(), seatRequest.getColumn());
             TicketResponse response = new TicketResponse(purchasedSeat);
+            cinemaRoom.setToken(purchasedSeat, response.getToken());
             return ResponseEntity.ok(response);
         }
     }
+
+    @PostMapping("/return")
+    public  ResponseEntity<Object> returnSeat(@RequestBody Map<String, String> request) {
+        String token = request.get("token");
+        Seat returnedSeat = cinemaRoom.returnSeat(token);
+        if (returnedSeat == null) {
+            return ResponseEntity.badRequest().body("{\"error\": \"Wrong token!\"}");
+        }
+        Map<String, Object> responseBody = new HashMap<>();
+        responseBody.put("ticket", returnedSeat);
+        return ResponseEntity.ok(responseBody);
+        }
 
     @ExceptionHandler(IllegalArgumentException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
