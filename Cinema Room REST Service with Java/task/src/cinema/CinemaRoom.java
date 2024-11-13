@@ -10,10 +10,12 @@ public class CinemaRoom {
     private int columns;
     private List<Seat> seats;
     private final Map<String, Seat> purchasedTickets = new HashMap<>();
+    private int totalIncome;
 
     public CinemaRoom(int totalRows, int totalColumns) {
         this.rows = totalRows;
         this.columns = totalColumns;
+        this.totalIncome = 0;
         this.seats = new ArrayList<>();
         for (int i = 1; i <= totalRows; i++) {
             for (int j = 1; j <= totalColumns; j++) {
@@ -51,6 +53,7 @@ public class CinemaRoom {
             if (seat.getRow() == row && seat.getColumn() == column) {
 
                 seat.setPurchased(true);
+                totalIncome += seat.getPrice();
                 return seat;
             }
         }
@@ -82,7 +85,21 @@ public class CinemaRoom {
         Seat seat = purchasedTickets.remove(token);
         if (seat != null) {
             seat.setPurchased(false);
+            totalIncome -= seat.getPrice();
         }
         return seat;
     }
+
+    public int getTotalIncome() {
+        return totalIncome;
+    }
+
+    public int getAvailableSeats(){
+        return (int) seats.stream().filter(seat -> !seat.isPurchased()).count();
+    }
+
+    public int getPurchasedTickets(){
+        return (int) seats.stream().filter(Seat::isPurchased).count();
+    }
+
 }
