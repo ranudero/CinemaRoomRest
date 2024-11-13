@@ -5,16 +5,22 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping()
 public class CinemaController {
     private final CinemaRoom cinemaRoom = new CinemaRoom(9, 9);
 
-    @RequestMapping("/seats")
-    public CinemaRoom getAllSeats() {
-        return cinemaRoom;
+    @GetMapping("/seats")
+    public ResponseEntity<Map<String, Object>> getAllSeats() {
+        Map<String, Object> responseBody = new HashMap<>();
+        responseBody.put("rows", cinemaRoom.getRows());
+        responseBody.put("columns", cinemaRoom.getColumns());
+        responseBody.put("seats", cinemaRoom.getSeats());
+        return ResponseEntity.ok(responseBody);
     }
 
     @PostMapping("/purchase")
@@ -42,6 +48,19 @@ public class CinemaController {
         responseBody.put("ticket", returnedSeat);
         return ResponseEntity.ok(responseBody);
         }
+
+    @GetMapping("/stats")
+    public ResponseEntity<Object> getStats(@RequestParam Map<String, String> params) {
+        String password = params.get("password");
+        if (!cinemaRoom.getPassword().equals(password)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("{\"error\": \"The password is wrong!\"}");
+        }
+        Map<String, Object> stats = new HashMap<>();
+        stats.put("income", cinemaRoom.getTotalIncome());
+        stats.put("available", cinemaRoom.getAvailableSeats());
+        stats.put("purchased", cinemaRoom.getPurchasedTickets());
+        return ResponseEntity.ok(stats);
+    }
 
     @ExceptionHandler(IllegalArgumentException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)

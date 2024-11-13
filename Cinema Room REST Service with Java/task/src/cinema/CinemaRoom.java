@@ -1,5 +1,7 @@
 package cinema;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -9,8 +11,16 @@ public class CinemaRoom {
     private int rows;
     private int columns;
     private List<Seat> seats;
+    @JsonIgnore
     private final Map<String, Seat> purchasedTickets = new HashMap<>();
+    @JsonIgnore
     private int totalIncome;
+    @JsonIgnore
+    private final String password = "super_secret";
+
+    public String getPassword() {
+        return password;
+    }
 
     public CinemaRoom(int totalRows, int totalColumns) {
         this.rows = totalRows;
