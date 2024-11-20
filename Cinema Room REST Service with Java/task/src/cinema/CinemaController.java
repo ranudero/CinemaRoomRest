@@ -5,22 +5,22 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping()
 public class CinemaController {
-    private final CinemaRoom cinemaRoom = new CinemaRoom(9, 9);
+    private final CinemaRoom cinemaRoom;
+    private final CinemaService cinemaService;
+
+    public CinemaController(CinemaRoom cinemaRoom, CinemaService cinemaService) {
+        this.cinemaRoom = cinemaRoom;
+        this.cinemaService = cinemaService;
+    }
 
     @GetMapping("/seats")
-    public ResponseEntity<Map<String, Object>> getAllSeats() {
-        Map<String, Object> responseBody = new HashMap<>();
-        responseBody.put("rows", cinemaRoom.getRows());
-        responseBody.put("columns", cinemaRoom.getColumns());
-        responseBody.put("seats", cinemaRoom.getSeats());
-        return ResponseEntity.ok(responseBody);
+    public ResponseEntity<CinemaService.CinemaRoomDto> getAllSeats() {
+        return ResponseEntity.ok(cinemaService.getRoomConfiguration());
     }
 
     @PostMapping("/purchase")

@@ -1,0 +1,13 @@
+server:
+  port: 28852
+  error:
+    include-message: always
+
+management:
+  endpoint:
+    shutdown:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: *
